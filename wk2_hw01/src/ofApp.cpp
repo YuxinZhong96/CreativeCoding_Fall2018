@@ -2,75 +2,79 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-
+    
+    gui.setup();
+    gui.add(freqSlider.setup("Sin Freq", 1, 0.25, 5));
     ofSetBackgroundColor(255, 255, 255);
     
     redR = 204;
     redG = 43;
     redB = 94;
     
+    
     purpleR = 117;
     purpleG = 58;
     purpleB = 136;
     
-
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    
-    
-
-    
-//    if (pct < 1){
-//        pct += .005;}
-//
-//    if (pct >= 1){
-//        pct = 0;
-//    }
-    
-    
     pct = ofMap(sin(ofGetElapsedTimef()), -1, 1, 0, 1);
-    
+
+  
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
     
+    ofSetRectMode(OF_RECTMODE_CENTER);
     
-//    ofSetRectMode(OF_RECTMODE_CENTER);
-//    ofDrawRectangle(ofGetWidth()/2, ofGetHeight()/2, ofGetWidth(), ofGetHeight());
+    float targetAngle = atan2(mouseY - ofGetHeight()/3, mouseX - ofGetWidth()/3);
     
-    
-    for (int x = 12; x < ofGetWidth(); x += 50){
-        for (int y = 0; y < ofGetHeight(); y += 50){
+    for (int i = 0; i < 360; i += 5){
+        for (int j = 5; j < 1500; j += 25){
             
-            float inOutCubicPct = inOutCubic(pct);
             
-            int StartR = 20;
-            int EndR = 100;
+            float sinValue = ofMap(sin(ofGetElapsedTimef()) * j * freqSlider * 0.01, -1, 1, -5, 15);
             
-            R = (1 - inOutCubicPct) * StartR + inOutCubicPct * EndR;
+            float a = 5 + sinValue;
             
-            r = (1 - inOutCubicPct) * purpleR + inOutCubicPct * redR;
-            g = (1 - inOutCubicPct) * purpleG + inOutCubicPct * redG;
-            b = (1 - inOutCubicPct) * purpleB + inOutCubicPct * redB;
+            float angle = ofDegToRad(i);
             
-            ofSetColor(r, g, b);
-//            ofSetCircleResolution(50);
-//            ofDrawCircle(x, y, R);
+            float posX = ofGetWidth()/2 + j * cos(angle);
+            float posY = ofGetHeight()/2 + j * sin(angle);
             
-            ofSetRectMode(OF_RECTMODE_CENTER);
-            ofDrawRectangle(x, y, R, R);
+            pct = ofMap(sin(ofGetElapsedTimef()), -1, 1, 0, 1);
+
             
+            int r = (1 - pct) * purpleR + pct * redR;
+            int g = (1 - pct) * purpleG + pct * redG;
+            int b = (1 - pct) * purpleB + pct * redB;
+            
+            
+            ofPushMatrix();
+            
+                ofTranslate(ofGetWidth()/3, ofGetHeight()/3);
+            
+                ofRotateZRad(targetAngle);
+            
+                ofSetColor(r,g,b);
+            
+                ofDrawCircle(posX, posY, a);
+       
+            ofPopMatrix();
+            
+     
+            
+
         }
-    
     }
+    
+    
+    gui.draw();
 
-}
-
-float ofApp::inOutCubic(float t){
-    return t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
 }
 
 //--------------------------------------------------------------

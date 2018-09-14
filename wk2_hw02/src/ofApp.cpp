@@ -2,75 +2,58 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-
+    
+    ofSetVerticalSync(true);
+    
     ofSetBackgroundColor(255, 255, 255);
+    ofSetVerticalSync(true);
     
-    redR = 204;
-    redG = 43;
-    redB = 94;
+    int num = 1000;
     
-    purpleR = 117;
-    purpleG = 58;
-    purpleB = 136;
+    p.assign(num, Particle());
+    resetParticles();
     
 
+}
+
+void ofApp::resetParticles(){
+    
+    attractPoints.clear();
+    for(int i = 0; i < 1; i++){
+        attractPoints.push_back( ofPoint( ofMap(i, 0, 4, 100, ofGetWidth()-100) , ofRandom(100, ofGetHeight()-100) ) );
+    }
+    
+    attractPointsWithMovement = attractPoints;
+    
+    for(unsigned int i = 0; i < p.size(); i++){
+        
+        p[i].setAttractPoints(&attractPointsWithMovement);;
+        p[i].reset();
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
     
+    for(unsigned int i = 0; i < p.size(); i++){
+        
+        p[i].update();
+        
+    }
     
-
-    
-//    if (pct < 1){
-//        pct += .005;}
-//
-//    if (pct >= 1){
-//        pct = 0;
-//    }
-    
-    
-    pct = ofMap(sin(ofGetElapsedTimef()), -1, 1, 0, 1);
-    
+    for(unsigned int i = 0; i < attractPointsWithMovement.size(); i++){
+        attractPointsWithMovement[i].x = attractPoints[i].x + ofSignedNoise(i * 10, ofGetElapsedTimef() * 0.7) * 10.0;
+        attractPointsWithMovement[i].y = attractPoints[i].y + ofSignedNoise(i * -10, ofGetElapsedTimef() * 0.7) * 10.0;
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
     
-    
-//    ofSetRectMode(OF_RECTMODE_CENTER);
-//    ofDrawRectangle(ofGetWidth()/2, ofGetHeight()/2, ofGetWidth(), ofGetHeight());
-    
-    
-    for (int x = 12; x < ofGetWidth(); x += 50){
-        for (int y = 0; y < ofGetHeight(); y += 50){
-            
-            float inOutCubicPct = inOutCubic(pct);
-            
-            int StartR = 20;
-            int EndR = 100;
-            
-            R = (1 - inOutCubicPct) * StartR + inOutCubicPct * EndR;
-            
-            r = (1 - inOutCubicPct) * purpleR + inOutCubicPct * redR;
-            g = (1 - inOutCubicPct) * purpleG + inOutCubicPct * redG;
-            b = (1 - inOutCubicPct) * purpleB + inOutCubicPct * redB;
-            
-            ofSetColor(r, g, b);
-//            ofSetCircleResolution(50);
-//            ofDrawCircle(x, y, R);
-            
-            ofSetRectMode(OF_RECTMODE_CENTER);
-            ofDrawRectangle(x, y, R, R);
-            
-        }
-    
+    for(unsigned int i = 0; i < p.size(); i++){
+        p[i].draw();
     }
 
-}
-
-float ofApp::inOutCubic(float t){
-    return t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
 }
 
 //--------------------------------------------------------------

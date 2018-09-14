@@ -10,4 +10,32 @@
 
 #include <stdio.h>
 
+#include "ofMain.h"
+
+
+class Particle{
+    
+public:
+    Particle();
+    
+    void setAttractPoints( vector<ofPoint> * attract );
+    
+    void reset();
+    void update();
+    void draw();
+    
+    
+    ofPoint pos;
+    ofPoint vel;
+    ofPoint frc;
+    
+    float drag;
+    float uniqueVal;
+    float scale;
+
+    
+    vector <ofPoint> * attractPoints;
+    
+};
+
 #endif /* Particle_hpp */
