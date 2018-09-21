@@ -8,6 +8,7 @@
 #include "Particle.hpp"
 
 Particle::Particle(){
+    
     attractPoints = NULL;
 }
 
@@ -43,8 +44,9 @@ void Particle::reset(){
 void Particle::update(){
     
     ofPoint attractPt(ofGetMouseX(), ofGetMouseY());
-    frc = attractPt-pos;
+    frc = attractPt - pos;
     frc.normalize();
+    
     vel *= drag;
     vel += frc * 0.6;
     
