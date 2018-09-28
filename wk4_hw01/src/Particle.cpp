@@ -23,12 +23,16 @@ Particle::Particle(){
 
 void Particle::setup(ofPoint _pos){
     
-//    pos.x = ofRandom(0, ofGetWidth());
-//    pos.y = ofRandom(0, ofGetHeight());
+    //    pos.x = ofRandom(0, ofGetWidth());
+    //    pos.y = ofRandom(0, ofGetHeight());
     
     pos = _pos;
     
     vel.set(ofRandom(-1,1), ofRandom(-1,1));
+    
+    acc.set(ofRandom(-1,1), ofRandom(-1,1));
+    
+    noiseRandomOffset.set(ofRandom(10), ofRandom(10), ofRandom(10));
     
 }
 
@@ -47,13 +51,13 @@ void Particle::addAttractionForce(ofPoint pos_, float rad_, float scale){
         
         diff *= 1.0 - (diff.length()/ rad_);
         addForce(diff * scale);
-       }
+    }
     
 }
 
 
 void Particle::addRepulsionForce(ofPoint pos_, float rad_, float scale){
-
+    
     ofPoint diff = pos_ - pos;
     
     // 2. Test if we are close enough to recieve attraction force
@@ -74,23 +78,28 @@ void Particle::update(){
     vel += acc;
     vel *= damp;
     pos += vel;
-    acc *= 0.0;
+//    acc *= 0.0;
+    
+    acc += ofSignedNoise(counter, pos.x * 0.001 + pos.y * 0.001);
+    
+    if ( pos.x < 0 || pos.x > ofGetWidth() || pos.y < 0 || pos.y > ofGetHeight() ){
+        
+        vel *= -1;
+    }
     
     
 }
 
 void Particle::addForce(ofPoint force){
     
-    acc += force;
-    
+//    acc += force;
+
 }
 
 
 
 void Particle::draw(){
-    ofDrawCircle(pos.x, pos.y, 10);
+    ofDrawRectangle(pos.x, pos.y, 10, 10);
 }
-
-
 
 
