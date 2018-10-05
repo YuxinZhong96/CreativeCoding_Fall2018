@@ -15,7 +15,7 @@ void ofApp::setup(){
     ofSetVerticalSync(true);
     
     
-    for(int i = 0; i<1000; i++){
+    for(int i = 0; i<1500; i++){
         Particle p;
         particles.push_back(p);
         particles[i].setup(ofPoint(

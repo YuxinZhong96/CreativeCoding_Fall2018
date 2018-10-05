@@ -1,6 +1,9 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxGui.h"
+#include "Particle.hpp"
+
 
 class ofApp : public ofBaseApp{
 
@@ -21,18 +24,28 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
     
-    
-        void ripple();
+        float getVal(int x, int y);
         void sim();
-    
-    
-        ofImage lilies;
-        ofImage updatedlilies;
+        void ripple();
     
         int w;
         int h;
-        int counter;
-        int pixel;
+        int pixels;
     
+        ofImage image;
+        ofImage updatedImage;
+    
+        vector <float> oData;
+        vector <float> nData;
+        vector <float> tData;
+    
+        float eps = 10.0;
+
+    
+    
+        vector <Particle> particles;
+    
+        ofxPanel gui;
+        ofxFloatSlider ripples;
 		
 };
