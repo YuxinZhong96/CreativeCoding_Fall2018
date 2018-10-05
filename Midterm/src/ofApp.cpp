@@ -98,6 +98,10 @@ void ofApp::draw(){
     
     updatedImage.draw(0,0);
     
+    if(ofRandom(1) < 0.2)
+    ripple();
+
+    
     
     for(int i = 0; i < particles.size(); i++){
             ofColor c = image.getColor(particles[i].pos.x, particles[i].pos.y);
@@ -125,9 +129,13 @@ void ofApp::draw(){
 }
 
 void ofApp::ripple(){
-        //Randomly make ripple
-        int rx = ofGetMouseX() + 5;
-        int ry = ofGetMouseY() + 5;
+    
+//        int rx = ofGetMouseX() + 5;
+//        int ry = ofGetMouseY() + 5;
+    
+        int rx = (int)ofRandom(0, w) + 5;
+        int ry = (int)ofRandom(0, h) + 5;
+    
         for (int x = -5; x < 5; x++){
             for (int y = -5; y < 5; y++){
                 int targetPix = (rx + x) + (w * (ry + y));
@@ -183,7 +191,6 @@ void ofApp::sim(){
         if (x > 1 || y > 1 || x <= w - 1 || y <= h - 1){
             float val = (oData[(x-1)+y*w] + oData[(x+1)+y*w] + oData[x+(y-1)*w] + oData[x+(y+1)*w]) / 2;
             val = val - nData[x+y*w];
-            val *= 0.96875;
             nData[x+y*w] = val;
         }
     }
@@ -214,7 +221,7 @@ void ofApp::mouseDragged(int x, int y, int button){
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
     
-    ripple();
+//    ripple();
     
 
 }
