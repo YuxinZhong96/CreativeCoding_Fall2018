@@ -31,6 +31,8 @@ class ofApp : public ofBaseApp{
         int w;
         int h;
         int pixels;
+        int bg;
+    
     
         ofImage image;
         ofImage updatedImage;

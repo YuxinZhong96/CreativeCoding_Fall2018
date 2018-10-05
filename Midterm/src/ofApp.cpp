@@ -3,12 +3,18 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     
-    image.load("bg.jpeg");
+    image.load("bg1.jpeg");
+    
+    bg = 1;
+    
     
     w = image.getWidth();
     h = image.getHeight();
     pixels = w * h;
     updatedImage.allocate(w, h, OF_IMAGE_COLOR);
+    
+    ofSetFullscreen(true);
+    
     
     
     tData.resize(pixels);
@@ -48,9 +54,10 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     
-    
+    ofLog() << "update sim";
     sim();
     
+    ofLog() << "update pixels";
     for(int i = 0; i < pixels; i++){
         int x = i % w;
         int y = i / w;
@@ -62,14 +69,16 @@ void ofApp::update(){
         n.normalize();
 
         ofColor c = image.getColor(x + n.x * ripples, y + n.y * ripples);
-        
+        c.r = ofClamp(c.r, 0, 255);
+        c.g = ofClamp(c.g, 0, 255);
+        c.b = ofClamp(c.b, 0, 255);
         updatedImage.setColor(x, y, c);
         
     }
     
     updatedImage.update();
     
-    
+    ofLog() << "update particles";
     ofPoint mouse = ofPoint(mouseX, mouseY);
     
     
@@ -94,31 +103,36 @@ void ofApp::draw(){
     
     updatedImage.draw(0,0);
     
-    if(ofRandom(1) < 0.2)
+    if(ofRandom(1) < 0.3)
     ripple();
 
     
     
     for(int i = 0; i < particles.size(); i++){
+        
+        int pixelIndex =particles[i].pos.y * w + particles[i].pos.x;
+        if(pixelIndex < w*h-1 && pixelIndex >= 0){
             ofColor c = image.getColor(particles[i].pos.x, particles[i].pos.y);
             ofSetColor(c,100);
             particles[i].draw();
-                }
+        }
+    }
 
     
     float maxDist = 50;
-    
-    for (int i = 0; i < particles.size(); i++){
-        for (int j = 0; j < particles.size(); j++){
-            float dist = (particles[i].pos - particles[j].pos).length();
-            if(dist < maxDist){
-                
-                float alpha = ofMap(dist, 0, maxDist, 255, 0);
-                ofSetColor(255, alpha);
-            }
-        }
-    }
-    
+    float alpha = 255;
+    ofSetColor(255, alpha);
+//    for (int i = 0; i < particles.size(); i++){
+//        for (int j = 0; j < particles.size(); j++){
+//            float dist = (particles[i].pos - particles[j].pos).length();
+//            if(dist < maxDist){
+//
+//                alpha = ofMap(dist, 0, maxDist, 255, 0);
+//                ofSetColor(255, alpha);
+//            }
+//        }
+//    }
+//    ofLog()<<alpha;
     gui.draw();
 
 
@@ -204,9 +218,6 @@ void ofApp::keyReleased(int key){
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
     
-
-
-
 }
 
 //--------------------------------------------------------------
@@ -217,8 +228,13 @@ void ofApp::mouseDragged(int x, int y, int button){
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
     
-//    ripple();
+    bg *= -1;
     
+    if(bg == 1)
+        image.load("bg1.jpeg");
+    
+    else
+        image.load("bg2.jpeg");
 
 }
 
