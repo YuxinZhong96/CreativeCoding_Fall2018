@@ -79,9 +79,9 @@ void Particle::update(){
     pos += vel;
     counter += 1;
     
-    acc += ofSignedNoise(counter, pos.x * 0.005 + pos.y * 0.001);
+    acc += ofSignedNoise(counter, pos.x * 0.001 + pos.y * 0.001);
     
-    if ( pos.x < 0 || pos.x > ofGetWidth() || pos.y < 0 || pos.y > ofGetHeight() ){
+    if ( pos.x < 1 || pos.x > ofGetWidth() || pos.y < 1 || pos.y > ofGetHeight() ){
         
         vel *= -1;
     }

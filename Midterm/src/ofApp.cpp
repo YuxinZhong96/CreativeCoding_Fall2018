@@ -55,16 +55,12 @@ void ofApp::update(){
         int x = i % w;
         int y = i / w;
         
-        // check pixels around
+
         
         ofVec3f n = ofVec3f(getVal(x - eps, y) - getVal(x + eps, y), getVal(x, y - eps) - getVal(x, y + eps), eps * 2.0);
         
-        
         n.normalize();
 
-        
-        //Get edge of ripple
-        
         ofColor c = image.getColor(x + n.x * ripples, y + n.y * ripples);
         
         updatedImage.setColor(x, y, c);
@@ -168,7 +164,7 @@ float ofApp::getVal(int x, int y){
 
 void ofApp::sim(){
     
-    // Store current situation
+
     
     for(int i = 0; i < pixels; i++){
         tData[i] = oData[i];
@@ -182,13 +178,13 @@ void ofApp::sim(){
         nData[i] = tData[i];
     }
     
-    // Spread
+
     
     for(int i = 0; i < pixels; i++){
         
         int x = i % w;
         int y = i / w;
-        if (x > 1 || y > 1 || x <= w - 1 || y <= h - 1){
+        if (x > 1 && y > 1 && x <= w - 1 && y <= h - 1){
             float val = (oData[(x-1)+y*w] + oData[(x+1)+y*w] + oData[x+(y-1)*w] + oData[x+(y+1)*w]) / 2;
             val = val - nData[x+y*w];
             nData[x+y*w] = val;
