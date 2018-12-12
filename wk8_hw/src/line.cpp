@@ -45,7 +45,7 @@ void line::update(){
 
         for (auto &vert: SingleLine.getVertices()){
 
-            vert.x = xPos + 20 * sin(t * vert.y / 10) * ofSignedNoise(t * 0.001, vert.y * 0.005, ofGetMouseY() * 0.002);
+            vert.x = xPos + 20 * sin(t * vert.y / 10) * ofSignedNoise(t * 0.001, vert.y * 0.005, ofGetMouseY() * 0.002, ofGetMouseX() * 0.004);
             
 
             }
